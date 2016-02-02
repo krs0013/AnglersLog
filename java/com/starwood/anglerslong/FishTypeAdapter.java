@@ -52,7 +52,7 @@ public class FishTypeAdapter extends RecyclerView.Adapter<FishTypeAdapter.ViewHo
                 "Mullet",
                 "Porgy",
                 "Ray",
-                "Sea Bass",
+                "Reef Fish",
                 "Shark",
                 "Snapper",
                 "Snook",

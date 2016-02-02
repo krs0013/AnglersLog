@@ -43,6 +43,25 @@
         <activity android:name=".Popup"
             android:theme="@style/AppTheme.PopupTheme"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".Checklist"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".LicenseAddActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".LicenseActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".FishingRegulationsActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".FishingRegulatoryPagerActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

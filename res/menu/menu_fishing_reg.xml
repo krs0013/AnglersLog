@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/actionbar_sort"
+        android:title="Sort"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        app:showAsAction="always" >
+        <menu>
+            <item
+                android:id="@+id/south_carolina"
+                android:title="South Carolina"/>
+            <item
+                android:id="@+id/georgia"
+                android:title="Georgia"/>
+            <item
+                android:id="@+id/florida"
+                android:title="Florida"/>
+            <item
+                android:id="@+id/alabama"
+                android:title="Alabama"/>
+            <item
+                android:id="@+id/mississippi"
+                android:title="Mississippi"/>
+        </menu>
+    </item>
+
+</menu>

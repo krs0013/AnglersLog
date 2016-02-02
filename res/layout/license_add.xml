@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <ImageView
-        android:id="@+id/custom_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.75"
-        android:visibility="gone"/>
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/add_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.25" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:id="@+id/add_ll"
@@ -36,96 +27,89 @@
                 android:textStyle="italic" />
 
             <TextView
-                android:id="@+id/add_picture"
+                android:id="@+id/license_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
                 android:gravity="center"
-                android:text="Choose or Take a Picture:"
+                android:text="License Information:"
                 android:textSize="@dimen/text_ledium"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/take_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/spacing_large"
-                    android:src="@drawable/take_pic_img"/>
-
-                <ImageView
-                    android:id="@+id/choose_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing_large"
-                    android:src="@drawable/choose_pic_img"/>
-
-            </LinearLayout>
+                style="@style/spinner_style" />
 
             <EditText
-                android:id="@+id/species"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_gravity="center"
-                android:inputType="textPersonName"
-                android:hint="*Species" />
-
-            <EditText
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_gravity="center"
-                android:inputType="textPersonName"
-                android:hint="*Date" />
-
-            <EditText
-                android:id="@+id/location"
+                android:id="@+id/license_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_gravity="center"
                 android:inputType="textCapSentences"
-                android:hint="Location" />
+                android:hint="*License Name" />
 
             <EditText
-                android:id="@+id/bait"
+                android:id="@+id/license_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_gravity="center"
+                android:inputType="number"
+                android:hint="License Number" />
+
+            <EditText
+                android:id="@+id/license_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_gravity="center"
                 android:inputType="textCapSentences"
-                android:hint="Bait or Lure" />
+                android:hint="License Type" />
 
             <EditText
-                android:id="@+id/length"
+                android:id="@+id/license_issue_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_gravity="center"
-                android:inputType="phone"
-                android:hint="Length (in inches)" />
+                android:inputType="date"
+                android:hint="Issue Date" />
 
             <EditText
-                android:id="@+id/notes"
+                android:id="@+id/license_expiration_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_gravity="center"
-                android:inputType="textMultiLine|textCapSentences"
-                android:hint="Notes" />
+                android:inputType="date"
+                android:hint="Expiration Date" />
+
+            <EditText
+                android:id="@+id/license_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_gravity="center"
+                android:inputType="date"
+                android:hint="Date of Birth" />
+
+            <EditText
+                android:id="@+id/license_huntered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:layout_gravity="center"
+                android:inputType="textCapSentences"
+                android:hint="Hunter Ed." />
 
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

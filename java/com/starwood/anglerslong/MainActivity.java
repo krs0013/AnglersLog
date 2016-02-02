@@ -1,9 +1,11 @@
 package com.starwood.anglerslong;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -12,14 +14,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-
-import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -34,7 +36,12 @@ public class MainActivity extends ActionBarActivity {
     private CharSequence mTitleApp;
     private Fragment mFragment = null;
 
-    private ArrayList<Fragment> backstack = new ArrayList<>();
+    public static final String scUrl = "http://www.dnr.sc.gov/regs/fishing.html";
+    public static final String gaUrl = "http://www.eregulations.com/georgia/fishing/";
+    public static final String flUrl = "http://www.eregulations.com/florida/fishing/saltwater/";
+    public static final String alUrl = "http://www.outdooralabama.com/regulations-and-enforcement";
+    public static final String msUrl = "https://www.mdwfp.com/law-enforcement/fishing-rules-regs.aspx";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +50,13 @@ public class MainActivity extends ActionBarActivity {
 
         /* Sets the Drawer List */
         mOptionMenu = new String[] {
-                "Fishing Regulations",
+                "Home",
                 "Favorites",
-                "Log",
-                "Checklist",
-                "My Profile",
-                "Save a License",
                 "My Map",
+                "Fishing Regulations",
+                "Log",
+                "Fishing License",
+                "Checklist",
                 "Share Our App"
         };
 
@@ -57,12 +64,12 @@ public class MainActivity extends ActionBarActivity {
         mImagesMenu = new int[] {
                 R.drawable.home_icon,
                 R.drawable.favorites_heart,
-                R.drawable.my_drinks_icon,
+                R.drawable.map_icon,
+                R.drawable.fishing_regulations_icon,
+                R.drawable.log_icon,
+                R.drawable.license_icon,
                 R.drawable.manage_bar_check,
-                R.drawable.share_app_icon,
-                R.drawable.feedback_icon,
-                R.drawable.home_icon,
-                R.drawable.favorites_heart
+                R.drawable.share_app_icon
         };
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -76,39 +83,49 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-//                    case 0:
-//                        mFragment = new MainFragment(drinkList);
-//                        break;
+                    case 0:
+                        mFragment = new MainFragment();
+                        break;
                     case 1:
                         Intent favIntent = new Intent(getApplicationContext(), FavoriteActivity.class);
                         favIntent.putExtra("abtitle", "Log");
                         startActivity(favIntent);
                         break;
                     case 2:
-                        mFragment = new LogListFragment();
-                        createFragment(mFragment, "Log");
                         break;
-//                    case 3:
-//                        mFragment = new LogListFragment();
-//                        createFragment(mFragment, "Log");
-//                        break;
+                    case 3:
+                        displayDialog();
+                        break;
                     case 4:
+                        mFragment = new LogListFragment();
+                        break;
+                    case 5:
+                        Intent licenseIntent = new Intent(getApplicationContext(), LicenseActivity.class);
+                        licenseIntent.putExtra("abtitle", "Fishing License");
+                        startActivity(licenseIntent);
+                        break;
+                    case 6:
+                        Intent checklistIntent = new Intent(getApplicationContext(), Checklist.class);
+                        checklistIntent.putExtra("abtitle", "Checklist");
+                        startActivity(checklistIntent);
+                        break;
+                    case 7:
                         shareOurApp();
                         break;
-//                    case 5:
-//                        mFragment = new SuggestionFragment();
-//                        break;
                 }
 
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.container, mFragment).commit();
-//                mDrawerList.setItemChecked(position, true);
-//
-//                mTitleSection = mOptionMenu[position];
-//                getSupportActionBar().setTitle(mTitleSection);
-//
-//                mDrawerLayout.closeDrawer(mDrawerRelativeLayout);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.container, mFragment);
+                transaction.addToBackStack(null);
+                mDrawerList.setItemChecked(position, true);
+
+                mTitleSection = mOptionMenu[position];
+                getSupportActionBar().setTitle(mTitleSection);
+
+                mDrawerLayout.closeDrawer(mDrawerRelativeLayout);
+
+                transaction.commit();
             }
         });
 
@@ -140,8 +157,17 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+
+        /**** Inflate menu to add items to the action bar if it is present ****/
+        if (mFragment.getClass().equals(FishingRegulationsFragment.class)) {
+            inflater.inflate(R.menu.menu_fishing_reg, menu);
+            Log.d("KENNY", "Selected Webview Filter");
+        } else {
+            inflater.inflate(R.menu.menu_main, menu);
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -150,17 +176,36 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        /* If the user toggles the drawer, don't do anything else */
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.south_carolina:
+                FishingRegulationsFragment fragmentSC =
+                        (FishingRegulationsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+                fragmentSC.updateUrl(scUrl);
+                break;
+            case R.id.georgia:
+                FishingRegulationsFragment fragmentGA =
+                        (FishingRegulationsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+                fragmentGA.updateUrl(gaUrl);
+                break;
+            case R.id.florida:
+                FishingRegulationsFragment fragmentFL =
+                        (FishingRegulationsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+                fragmentFL.updateUrl(flUrl);
+                break;
+            case R.id.alabama:
+                FishingRegulationsFragment fragmentAL =
+                        (FishingRegulationsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+                fragmentAL.updateUrl(alUrl);
+                break;
+            case R.id.mississippi:
+                FishingRegulationsFragment fragmentMS =
+                        (FishingRegulationsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+                fragmentMS.updateUrl(msUrl);
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -170,19 +215,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
-        if (backstack != null && backstack.size() > 0) {
-            Fragment tempFrag = backstack.get(backstack.size() - 1);
-
-            if (tempFrag instanceof SpeciesFragment) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            if (mFragment instanceof SpeciesFragment) {
                 if (findViewById(R.id.single_photo).getVisibility() == View.VISIBLE)
                     findViewById(R.id.single_photo).setVisibility(View.GONE);
-                else {
-                    createFragment(tempFrag, "Anglers Log");
-                    popStack();
-                }
+                else
+                    getSupportFragmentManager().popBackStackImmediate();
             } else {
-                createFragment(tempFrag, "Anglers Log");
-                popStack();
+                getSupportFragmentManager().popBackStackImmediate();
             }
         } else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
@@ -220,6 +260,59 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /*****************************************************************************************
+     * Dialog to show fishing regulations
+     *****************************************************************************************/
+    private void displayDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.fishing_reg_dialog);
+        dialog.setTitle("Select a State:");
+
+        dialog.findViewById(R.id.sc_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(scUrl));
+                startActivity(browserIntent);
+            }
+        });
+
+        dialog.findViewById(R.id.ga_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(gaUrl));
+                startActivity(browserIntent);
+            }
+        });
+
+        dialog.findViewById(R.id.fl_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(flUrl));
+                startActivity(browserIntent);
+            }
+        });
+
+        dialog.findViewById(R.id.al_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(alUrl));
+                startActivity(browserIntent);
+            }
+        });
+
+        dialog.findViewById(R.id.ms_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(msUrl));
+                startActivity(browserIntent);
+            }
+        });
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    /*****************************************************************************************
      * Creates a new fragment to be loaded
      *****************************************************************************************
      * @param newFrag New Fragment to switch to
@@ -227,32 +320,23 @@ public class MainActivity extends ActionBarActivity {
      *****************************************************************************************/
     public void createFragment(Fragment newFrag, String fragTitle) {
 
-        Bundle bundle = new Bundle();
-        bundle.putString("type", fragTitle);
-        newFrag.setArguments(bundle);
+        try {
+            Bundle bundle = new Bundle();
+            bundle.putString("type", fragTitle);
+            newFrag.setArguments(bundle);
+        } catch (IllegalStateException i) {
+            Log.d("KENNY", "IllegalStateException: Fragment already active.");
+            i.printStackTrace();
+        }
 
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, newFrag);
         transaction.addToBackStack(null);
-        transaction.commit();
 
         mFragment = newFrag;
-        addToStack(newFrag);
-    }
 
-    /*****************************************************************************************
-     * Pop the stack of fragments
-     *****************************************************************************************/
-    public void popStack() {
-        backstack.remove(backstack.size()-1);
-    }
-
-    /*****************************************************************************************
-     * Pop the stack of fragments
-     *****************************************************************************************/
-    public void addToStack(Fragment addFrag) {
-        backstack.add(addFrag);
+        transaction.commit();
     }
 
 

@@ -116,6 +116,7 @@ public class LogActivity extends ActionBarActivity {
         if (id == R.id.save) {
             try {
                 saveLog();
+                onBackPressed();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -158,8 +159,6 @@ public class LogActivity extends ActionBarActivity {
                     try {
                         imageStream = getContentResolver().openInputStream(selectedImage);
                         yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-                        int width = yourSelectedImage.getWidth();
-                        int height = yourSelectedImage.getHeight();
                     } catch (IOException e) {
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "The InputStream didn't work...",
@@ -218,12 +217,11 @@ public class LogActivity extends ActionBarActivity {
     }
 
 
-
-
-
-
-
-
+    /*****************************************************************************************
+     *****************************************************************************************
+     *      ASYNC TASK used save the log
+     *****************************************************************************************
+     *****************************************************************************************/
     private class SaveLogTask extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog pd;
@@ -253,9 +251,7 @@ public class LogActivity extends ActionBarActivity {
             saveLogJSON();
             Log.d("LogSaveAsyncTask", "generateJSONToSave() worked!!!!");
 
-            Toast.makeText(getApplicationContext(), "The InputStream didn't work...",
-                    Toast.LENGTH_SHORT).show();
-            pd.dismiss();
+            try { pd.dismiss(); } catch (Exception e) { e.printStackTrace(); }
         }
 
         private void generateJSONToSave() throws IOException, JSONException {
@@ -280,7 +276,7 @@ public class LogActivity extends ActionBarActivity {
             if (yourSelectedImage != null) {
                 try {
                     PictureStorage pictureStorage = new PictureStorage(getApplicationContext());
-                    image = pictureStorage.saveToInternalSorage(getApplicationContext(), yourSelectedImage);
+                    image = pictureStorage.bitMapToString(yourSelectedImage);
                 } catch (Exception e) {
                     image = "no";
                     e.printStackTrace();
@@ -314,9 +310,9 @@ public class LogActivity extends ActionBarActivity {
                 JSONObject object = new JSONObject(logJSON);
                 JSONObject outer = object.getJSONObject("outermost");       // Get outermost json object (everything)
                 isOutermostThere = true;                                    // There is a JSON object already made
-                JSONArray logs = outer.getJSONArray("log");                 // Get all the previous logs
+                JSONArray logs = outer.getJSONArray("logs");                // Get all the previous logs
                 logs.put(logObject);                                        // Add this new log to the array
-                outer.put("log", logs);                                     // Overwrite the log list with new one
+                outer.put("logs", logs);                                    // Overwrite the log list with new one
                 object.put("outermost", outer);                             // Add outermost to the JSON object
                 json.writeJSON(object);                                     // Populate this in the memory
                 Toast.makeText(getApplicationContext(), "Nice Catch!  Your log has been saved.",
@@ -327,15 +323,15 @@ public class LogActivity extends ActionBarActivity {
                 try {
                     newLogList.put(logObject);                                  // Add the first entry using unique image string as index
                     if (isOutermostThere) {                                     // If there is a JSONObject already made
-                        String favoriteJson = json.readProfileJSON();           // Load the populated data
-                        JSONObject object = new JSONObject(favoriteJson);       // Get the whole json object
+                        String logJSON = json.readProfileJSON();                // Load the populated data
+                        JSONObject object = new JSONObject(logJSON);            // Get the whole json object
                         JSONObject outer = object.getJSONObject("outermost");   // Get outermost object
-                        outer.put("log", newLogList);                           // Add new favorites array to the profile object
+                        outer.put("logs", newLogList);                          // Add new favorites array to the profile object
                         object.put("outermost", outer);
                         json.writeJSON(object);                                 // Write this to the memory
                     } else {
-                        JSONArray logs = new JSONArray();               // Create new favorites object
-                        logs.put(newLogList);                           // Add favorites list to favorites JSON object
+                        JSONObject logs = new JSONObject();             // Create new favorites object
+                        logs.put("logs", newLogList);                   // Add favorites list to favorites JSON object
                         JSONObject outer = new JSONObject();            // Create new outermost JSON since it doesnt exist
                         outer.put("outermost", logs);                   // Store new favorites list into it.
                         json.writeJSON(outer);

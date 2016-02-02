@@ -9,112 +9,104 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
         card_view:cardCornerRadius="4dp">
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/card_color">
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/log_species"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/card_color">
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="right"
+                android:paddingTop="@dimen/medium"
+                android:paddingRight="@dimen/medium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_medium"
+                android:background="@color/bg_color_orange"
+                android:text="Species: "/>
 
-                <ImageView
-                    android:id="@+id/log_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="@dimen/medium"
-                    android:layout_marginRight="@dimen/medium"
-                    android:src="@drawable/choose_pic_img"/>
+            <ImageView
+                android:id="@+id/log_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/small"
+                android:layout_marginTop="@dimen/small"
+                android:src="@drawable/icon_sailfish_steelblue"
+                android:layout_alignParentTop="true"/>
 
-                <TextView
-                    android:id="@+id/log_species"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/log_image"
-                    android:gravity="center"
-                    android:background="@color/background_material_light"
-                    android:textSize="@dimen/ledium"
-                    android:textStyle="bold"
-                    android:text="Species: "/>
+            <TextView
+                android:id="@+id/log_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/log_image"
+                android:layout_below="@id/log_species"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_alignParentRight="true"
+                android:paddingTop="@dimen/smedium"
+                android:paddingRight="@dimen/medium"
+                android:paddingLeft="@dimen/medium"
+                android:textStyle="bold"
+                android:text="Date: "/>
 
-                <LinearLayout
-                    android:id="@+id/log_attributes"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="@dimen/spacing_small"
-                    android:layout_below="@id/log_species">
+            <TextView
+                android:id="@+id/log_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/log_date"
+                android:layout_toRightOf="@id/log_image"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/medium"
+                android:paddingLeft="@dimen/medium"
+                android:textStyle="bold"
+                android:text="Location: "/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="@dimen/small"
-                        android:layout_marginRight="@dimen/small"
-                        android:orientation="vertical">
+            <TextView
+                android:id="@+id/log_bait"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/log_location"
+                android:layout_toRightOf="@id/log_image"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/medium"
+                android:paddingLeft="@dimen/medium"
+                android:textStyle="bold"
+                android:text="Bait: "/>
 
-                        <TextView
-                            android:id="@+id/log_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/small"
-                            android:gravity="center"
-                            android:text="Date: "/>
+            <TextView
+                android:id="@+id/log_length"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/log_bait"
+                android:layout_toRightOf="@id/log_image"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/medium"
+                android:paddingLeft="@dimen/medium"
+                android:textStyle="bold"
+                android:text="Length: "/>
 
-                        <TextView
-                            android:id="@+id/log_location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/small"
-                            android:gravity="center"
-                            android:text="Location: "/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="@dimen/small"
-                        android:layout_marginRight="@dimen/small"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/log_bait"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/small"
-                            android:gravity="center"
-                            android:text="Bait: "/>
-
-                        <TextView
-                            android:id="@+id/log_length"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/small"
-                            android:gravity="center"
-                            android:text="Length: "/>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/log_notes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small"
-                    android:layout_below="@id/log_attributes"
-                    android:gravity="center"
-                    android:textSize="@dimen/smedium"
-                    android:text="Notes: "/>
-
-
-            </RelativeLayout>
-
-        </ScrollView>
+            <TextView
+                android:id="@+id/log_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/medium"
+                android:paddingLeft="@dimen/medium"
+                android:textStyle="bold"
+                android:layout_below="@id/log_length"
+                android:text="Notes: "/>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

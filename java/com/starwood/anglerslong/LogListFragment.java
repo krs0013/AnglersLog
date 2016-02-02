@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +63,7 @@ public class LogListFragment extends Fragment {
             JSONObject object = new JSONObject(logJSON);
             JSONObject outer = object.getJSONObject("outermost");       // Get outermost json object (everything)
             isOutermostThere = true;                                    // There is a JSON object already made
-            JSONArray logs = outer.getJSONArray("log");                 // Get all the previous logs
+            JSONArray logs = outer.getJSONArray("logs");                 // Get all the previous logs
             for (int i = 0; i < logs.length(); i++) {
                 JSONObject eachLog = logs.getJSONObject(i);
                 LogListItem logItem = new LogListItem();
@@ -76,6 +77,10 @@ public class LogListFragment extends Fragment {
                 logItemArray.add(logItem);
             }
         } catch (IOException | JSONException e) {
+
+            Toast.makeText(getActivity(), "You have not added any Logs...",
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
 
         }
     }

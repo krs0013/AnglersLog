@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/smedium"
+    android:paddingBottom="@dimen/smedium"
+    android:background="@drawable/gradient_checklist"
+    android:descendantFocusability="blocksDescendants">
+
+    <TextView
+        android:id="@+id/checklist_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/small"
+        android:textSize="@dimen/medium"
+        android:textColor="@android:color/black"
+        android:text="Angostura Bitters"/>
+
+    <CheckBox
+        android:id="@+id/checklist_item_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:shadowColor="@android:color/holo_green_dark"
+        android:paddingLeft="@dimen/small"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

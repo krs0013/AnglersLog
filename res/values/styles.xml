@@ -34,4 +34,22 @@
     <color name="winBackground">#98cb4a</color>
     <color name="background">#f76d3c</color>
 
+    <style name="spinner_style" >
+        <item name="android:background">@drawable/gradient_spinner</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:popupBackground">#DFFFFFFF</item>
+        <item name="android:textSize">@dimen/text_smedium</item>
+    </style>
+
+    <style name="license_style" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/spacing_xxsmall</item>
+        <item name="android:textSize">@dimen/text_smedium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

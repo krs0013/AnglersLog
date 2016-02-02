@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Created by kennystreit on 1/27/15.
@@ -226,6 +227,54 @@ public class JsonStorage {
 
             jsonArray.add(tempArray);
         }
+    }
+
+    /******************************************************************************************************************************************
+     * Loads the json array into string form
+     ******************************************************************************************************************************************
+     * @return The full string of the json array
+     * @throws java.io.IOException
+     * @throws org.json.JSONException
+     ******************************************************************************************************************************************/
+    public String readChecklistAsset(String file) throws IOException {
+        StringBuffer sb = new StringBuffer();
+        BufferedReader br = null;
+
+        try {
+            br = new BufferedReader(new InputStreamReader(mContext.getAssets().open(
+                    file)));
+            String temp;
+            while ((temp = br.readLine()) != null)
+                sb.append(temp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close(); // stop reading
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Retrieves the name-value pairs within the textfile.
+     * @param json ingredients JSON array with name-value pairs
+     * @return HashMap representing the name-value pairs
+     * @throws JSONException
+     */
+    public LinkedHashMap<String, Boolean> generateCachedList(String json) throws JSONException {
+        JSONObject object = new JSONObject(json);
+        JSONArray ingredients = object.getJSONArray("checklist");
+
+        LinkedHashMap<String, Boolean> list = new LinkedHashMap<>();
+        for (int i = 0; i < ingredients.length(); i++) {
+            JSONObject item = ingredients.getJSONObject(i);
+            list.put(item.getString("item"), item.getBoolean("checked"));
+        }
+        return list;
     }
 
 }
